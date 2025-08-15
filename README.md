@@ -10,11 +10,32 @@ App boilerplate is based on the following: https://developer.mozilla.org/en-US/d
 
 # Use
 
+**Build**
 ```
 wasm-pack build --target web
 ```
+
+**Generate a lure with Evilginx**
+As normal
+
+**Setup the Redirector**
 
 Copy the following files into a redirector folder:
 - difficult_redirect_bg.wasm
 - difficult_redirect_bg.js
 - index.html
+
+**Publish a working Redirector**
+
+- Use the redirector. This will display the proper encoded URL, then redirect to the template site
+- Use this link to obfuscate the lure URL using our super secret format: [CyberChef](https://cyberchef.org/#recipe=XOR(%7B'option':'UTF8','string':'K'%7D,'Standard',false)To_Hex('None',0))
+- Place the encoded url in the index.html file, greet() function
+
+Bonus Points:
+
+- Minify the .js file (don't obfuscate, this is all WASM boilerplate)
+- Make a beautiful index.html
+
+**TODO**
+- Fix error handling
+- Tests and builds
