@@ -37,5 +37,7 @@ Bonus Points:
 - Make a beautiful index.html
 
 **TODO**
-- Fix error handling
-- Tests and builds
+[x] Introduce builds and CI process
+[x] Better error handling
+[ ] Implement CPU time delays
+

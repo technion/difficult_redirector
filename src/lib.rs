@@ -16,7 +16,7 @@ fn set_cookie() -> Result<(), JsValue> {
     */
     let cookie: &'static str = "getme=redirected; max-age=86400; path=/; samesite=lax";
     
-    html_document.set_cookie(&cookie)?;
+    html_document.set_cookie(cookie)?;
     Ok(())
 
 }
