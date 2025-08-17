@@ -11,7 +11,7 @@ fn set_cookie(name: &str, value: &str) -> Result<(), JsValue> {
         "{}={}; max-age={}; path=/; samesite=lax",
         name,
         value,
-        1 * 24 * 60 * 60
+        24 * 60 * 60
     );
     
     html_document.set_cookie(&cookie)?;
