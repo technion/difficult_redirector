@@ -2,6 +2,9 @@
 name = "difficult-redirect"
 version = "0.1.0"
 edition = "2024"
+description = "A Redirector for evilginx, designed to use Webassembly and heavy CPU use"
+license = "MIT"
+repository = "https://github.com/technion/difficult_redirector/"
 
 [lib]
 crate-type = ["cdylib"]
