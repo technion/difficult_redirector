@@ -37,8 +37,12 @@ extern "C" {
 */
 
 fn decode_url(encoded_url: &str) -> Result<String, JsValue> {
-    let decoded_bytes = hex::decode(encoded_url).map_err(|_| JsValue::from_str("Invalid hex encoding"))?;
+    let decoded_url = hex::decode(encoded_url).map_err(|_| JsValue::from_str("Invalid hex encoding"))?;
+    let decoded_bytes = decoded_url.into_iter().map(|x: u8| x^b'K').collect();
     let decoded_url = String::from_utf8(decoded_bytes).map_err(|_| JsValue::from_str("Invalid UTF-8 sequence"))?;
+    if ! decoded_url.starts_with("http") {
+        return Err(JsValue::from_str("Invalid Decoded URL"));
+    }
     Ok(decoded_url)
 }
 
