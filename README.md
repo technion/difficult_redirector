@@ -47,7 +47,8 @@ Bonus Points:
 - I tried to write tests but it takes a whole headless browser to run them - not currently worth it
 
 **TODO**
-[x] Introduce builds and CI process
-[x] Better error handling
-[x] Implement CPU time delays
+
+- [x] Introduce builds and CI process
+- [x] Better error handling
+- [x] Implement CPU time delays
 
