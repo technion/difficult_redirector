@@ -8,6 +8,8 @@ This is an Evilginx redirector that uses WebAssembly. There are a few reasons fo
 
 App boilerplate is based on the following: https://developer.mozilla.org/en-US/docs/WebAssembly/Guides/Rust_to_Wasm
 
+There is also code to set a cookie as boilerplate for using WebAssembly to perform traditional JS based bot detection.
+
 # Use
 
 **Build**
@@ -16,6 +18,7 @@ wasm-pack build --target web
 ```
 
 **Generate a lure with Evilginx**
+
 As normal
 
 **Setup the Redirector**
@@ -34,10 +37,17 @@ Copy the following files into a redirector folder:
 Bonus Points:
 
 - Minify the .js file (don't obfuscate, this is all WASM boilerplate)
-- Make a beautiful index.html
+- Make a beautiful index.html with a stylish loading banner. This has been left for the reader to avoid any indicators
+
+**Development Guidelines**
+
+- Rust code is built with deny(unsafe_code)
+- Clippy tests
+- Allegedly panic free
+- I tried to write tests but it takes a whole headless browser to run them - not currently worth it
 
 **TODO**
 [x] Introduce builds and CI process
 [x] Better error handling
-[ ] Implement CPU time delays
+[x] Implement CPU time delays
 
