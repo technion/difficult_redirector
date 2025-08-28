@@ -47,6 +47,7 @@ name = "difficult-redirect"
 version = "0.1.0"
 dependencies = [
  "hex",
+ "js-sys",
  "sha2",
  "wasm-bindgen",
  "web-sys",
